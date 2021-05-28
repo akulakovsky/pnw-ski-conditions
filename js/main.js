@@ -18,35 +18,34 @@ function getData(hours) {
 				formatted[i - 1]["24 Hour Snow"] = results["data"][i][13];
 			}
 			// console.log(formatted);
-			var precipV = precip(formatted);
-			var maxTempV = maxTemp(formatted);
-			var minTempV = minTemp(formatted);
-			var avgTempV = avgTemp(formatted);
-			var currentTempV = currentTemp(formatted);
+			var precip = getPrecip(formatted);
+			var maxTemp = getMaxTemp(formatted);
+			var minTemp = getMinTemp(formatted);
+			var avgTemp = getAvgTemp(formatted);
+			var currentTemp = getCurrentTemp(formatted);
 
-			makeTable(precipV, maxTempV, minTempV, avgTempV, currentTempV);
+			makeTable(precip, maxTemp, minTemp, avgTemp, currentTemp);
 		}
 	});
 }
 
-function snow(data) {
+function getSnow(data) {
 
 }
 
-function precip(data) {
+function getPrecip(data) {
 	var total = 0;
 	data.forEach((item, index) => {
 		total += parseFloat(item["Precipitation"]);
 	})
-	console.log(`24 hour precip: ${total} inches`)
 	return total.toString().substring(0, 5);
 }
 
-function nonSnowPrecip(data) {
+function getNonSnowPrecip(data) {
 
 }
 
-function maxTemp(data) {
+function getMaxTemp(data) {
 	var max = -100;
 	data.forEach((item, index) => {
 		temp = parseFloat(item["Temperature"]);
@@ -54,11 +53,10 @@ function maxTemp(data) {
 			max = temp;
 		}
 	})
-	console.log(`24 hour max temp: ${max} F`)
 	return max;
 }
 
-function minTemp(data) {
+function getMinTemp(data) {
 	var min = 200;
 	data.forEach((item, index) => {
 		temp = parseFloat(item["Temperature"]);
@@ -66,11 +64,10 @@ function minTemp(data) {
 			min = temp;
 		}
 	})
-	console.log(`24 hour min temp: ${min} F`)
 	return min;
 }
 
-function avgTemp(data) {
+function getAvgTemp(data) {
 	var total = 0;
 	var count = 0;
 	data.forEach((item, index) => {
@@ -78,53 +75,43 @@ function avgTemp(data) {
 		count++;
 	})
 	average = total / count;
-	console.log(`24 hour average temp: ${average} F`)
 	return average.toString().substring(0, 5);
 }
 
-function currentTemp(data) {
+function getCurrentTemp(data) {
 	temp = parseFloat(data[0]["Temperature"])
-	console.log(`Current temperature: ${temp} F`);
 	return temp;
 }
 
-function currentSnowBase(data) {
+function getCurrentSnowBase(data) {
 	temp = parseFloat(data[0]["24 Hour Snow"])
-	console.log(`Current temperature: ${temp} F`);
 	return temp;
 }
 
-function makeTable(precipV, maxTempV, minTempV, avgTempV, currentTempV) {
+function makeTable(precip, maxTemp, minTemp, avgTemp, currentTemp) {
 	const table = document.createElement("table");
 	table.style.width = "100%";
-	table.classList.add("table");
-	table.classList.add("table-bordered");
+	table.classList.add("table", "table-bordered");
 	var header = table.createTHead();
 	var valueNames = header.insertRow(0);
 	var body = table.createTBody();
 	var values = body.insertRow(0);
 
-	precipTitle = valueNames.insertCell(0);
-	precipTitle.innerHTML = "Precip";
-	maxTempTitle = valueNames.insertCell(1);
-	maxTempTitle.innerHTML = "Max Temp";
-	minTempTitle = valueNames.insertCell(2);
-	minTempTitle.innerHTML = "Min Temp";
-	avgTempTitle = valueNames.insertCell(3);
-	avgTempTitle.innerHTML = "Average Temp";
-	currentTempTitle = valueNames.insertCell(4);
-	currentTempTitle.innerHTML = "Current Temp";
+	var data = [];
+	data[0] = ["Precip", "Max Temperature", "Min Temperature", "Average Temperature", "Current Temperature"];
+	data[1] = [precip, maxTemp, minTemp, avgTemp, currentTemp];
 
-	precipValue = values.insertCell(0);
-	precipValue.innerHTML = `${precipV} in`;
-	maxTempValue = values.insertCell(1);
-	maxTempValue.innerHTML = `${maxTempV}° F`;
-	minTempValue = values.insertCell(2);
-	minTempValue.innerHTML = `${minTempV}° F`;
-	avgTempValue = values.insertCell(3);
-	avgTempValue.innerHTML = `${avgTempV}° F`;
-	currentTempValue = values.insertCell(4);
-	currentTempValue.innerHTML = `${currentTempV}° F`;
+	var units = [" in", "° F", "° F", "° F", "° F"]
+
+	data[0].forEach((item, index) => {
+		var th = document.createElement("th");
+		th.innerHTML = item;
+		valueNames.appendChild(th);
+	})
+
+	data[1].forEach((item, index) => {
+		values.insertCell(-1).innerHTML = item + units[index];
+	})
 
 	var loading = document.getElementById("loading");
 	loading.remove();
