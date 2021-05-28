@@ -39,7 +39,7 @@ function precip(data) {
 		total += parseFloat(item["Precipitation"]);
 	})
 	console.log(`24 hour precip: ${total} inches`)
-	return total;
+	return total.toString().substring(0, 5);
 }
 
 function nonSnowPrecip(data) {
@@ -95,11 +95,14 @@ function currentSnowBase(data) {
 }
 
 function makeTable(precipV, maxTempV, minTempV, avgTempV, currentTempV) {
-	const table = document.createElement("TABLE");
+	const table = document.createElement("table");
 	table.style.width = "100%";
-	var valueNames = table.insertRow(-1);
-	var values = table.insertRow(-1);
-	console.log('here')
+	table.classList.add("table");
+	table.classList.add("table-bordered");
+	var header = table.createTHead();
+	var valueNames = header.insertRow(0);
+	var body = table.createTBody();
+	var values = body.insertRow(0);
 
 	precipTitle = valueNames.insertCell(0);
 	precipTitle.innerHTML = "Precip";
