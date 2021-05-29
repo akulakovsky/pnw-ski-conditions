@@ -1,5 +1,9 @@
 getData(24);
 
+if (halfmoon.getPreferredMode() == "not-set" && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  halfmoon.toggleDarkMode()
+}
+
 function getData(hours) {
 	Papa.parse("https://rocky-taiga-02859.herokuapp.com/https://nwac.us/data-portal/csv/q/?datalogger_id=1&year=2021", {
 		download: true,
@@ -98,7 +102,7 @@ function makeTable(precip, maxTemp, minTemp, avgTemp, currentTemp) {
 	var values = body.insertRow(0);
 
 	var data = [];
-	data[0] = ["Precip", "Max Temperature", "Min Temperature", "Average Temperature", "Current Temperature"];
+	data[0] = ["Precipitation", "Max Temperature", "Min Temperature", "Average Temperature", "Current Temperature"];
 	data[1] = [precip, maxTemp, minTemp, avgTemp, currentTemp];
 
 	var units = [" in", "° F", "° F", "° F", "° F"]
