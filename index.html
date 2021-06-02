@@ -40,6 +40,11 @@
 
   <script src="js/halfmoon.js"></script>
   <script src="js/papaparse.min.js"></script>
+  <script>
+    if (halfmoon.getPreferredMode() == "not-set" && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      halfmoon.toggleDarkMode()
+    }
+  </script>
   <script src="js/main.js"></script>
 </body>
 

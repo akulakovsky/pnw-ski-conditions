@@ -1,11 +1,8 @@
-getData(24);
+addStation(24, "https://nwac.us/data-portal/csv/q/?datalogger_id=1&year=2021", "Alpental Base");
+addStation(24, "https://nwac.us/data-portal/csv/q/?datalogger_id=28&year=2021", "Crystal Base");
 
-if (halfmoon.getPreferredMode() == "not-set" && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-  halfmoon.toggleDarkMode()
-}
-
-function getData(hours) {
-	Papa.parse("https://rocky-taiga-02859.herokuapp.com/https://nwac.us/data-portal/csv/q/?datalogger_id=1&year=2021", {
+function addStation(hours, url, stationName) {
+	Papa.parse(`https://rocky-taiga-02859.herokuapp.com/${url}`, {
 		download: true,
 		complete: function (results) {
 			var formatted = [];
@@ -21,14 +18,16 @@ function getData(hours) {
 				formatted[i - 1]["Wind Max"] = results["data"][i][9];
 				formatted[i - 1]["24 Hour Snow"] = results["data"][i][13];
 			}
-			// console.log(formatted);
 			var precip = getPrecip(formatted);
 			var maxTemp = getMaxTemp(formatted);
 			var minTemp = getMinTemp(formatted);
 			var avgTemp = getAvgTemp(formatted);
 			var currentTemp = getCurrentTemp(formatted);
 
-			makeTable(precip, maxTemp, minTemp, avgTemp, currentTemp);
+			if(document.getElementById("table") == null) {
+				makeInitialTable();
+			}
+			addRow([stationName, precip, maxTemp, minTemp, avgTemp, currentTemp]);
 		}
 	});
 }
@@ -92,29 +91,21 @@ function getCurrentSnowBase(data) {
 	return temp;
 }
 
-function makeTable(precip, maxTemp, minTemp, avgTemp, currentTemp) {
+function makeInitialTable() {
 	const table = document.createElement("table");
 	table.style.width = "100%";
+	table.id = "table";
 	table.classList.add("table", "table-bordered");
 	var header = table.createTHead();
-	var valueNames = header.insertRow(0);
 	var body = table.createTBody();
-	var values = body.insertRow(0);
+	body.id = "table-body"
+	var valueNames = header.insertRow(0);
+	var arr = ["Station", "Precipitation", "Max Temperature", "Min Temperature", "Average Temperature", "Current Temperature"]
 
-	var data = [];
-	data[0] = ["Precipitation", "Max Temperature", "Min Temperature", "Average Temperature", "Current Temperature"];
-	data[1] = [precip, maxTemp, minTemp, avgTemp, currentTemp];
-
-	var units = [" in", "° F", "° F", "° F", "° F"]
-
-	data[0].forEach((item, index) => {
+	arr.forEach((item, index) => {
 		var th = document.createElement("th");
 		th.innerHTML = item;
 		valueNames.appendChild(th);
-	})
-
-	data[1].forEach((item, index) => {
-		values.insertCell(-1).innerHTML = item + units[index];
 	})
 
 	var loading = document.getElementById("loading");
@@ -122,4 +113,16 @@ function makeTable(precip, maxTemp, minTemp, avgTemp, currentTemp) {
 
 	var div1 = document.getElementById("div1");
 	div1.appendChild(table);
+}
+
+function addRow(data) {
+	var body = document.getElementById("table-body");
+	console.log(data)
+	console.log(body)
+	var values = body.insertRow(-1);
+	var units = ["", " in", "° F", "° F", "° F", "° F"]
+
+	data.forEach((item, index) => {
+		values.insertCell(-1).innerHTML = item + units[index];
+	})
 }
