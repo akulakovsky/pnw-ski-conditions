@@ -17,11 +17,8 @@
 </head>
 
 <body data-set-preferred-mode-onload="true">
-  <!-- Page wrapper with .with-navbar class -->
   <div class="page-wrapper with-navbar">
-    <!-- Navbar (immediate child of the page wrapper) -->
     <nav class="navbar">
-      <!-- Navbar brand -->
       <a href="#" class="navbar-brand">
         <img src="https://i.imgur.com/thW0AwA.png" alt="Logo">
         PNW Ski Conditions
@@ -29,11 +26,13 @@
       <button class="btn btn-sm ml-auto" type="button" onclick="halfmoon.toggleDarkMode()">Dark mode</button>
     </nav>
 
-    <!-- Content wrapper -->
     <div class="content-wrapper">
       <div id="div1">
-        <h1>Alpental Base - 24 Hour Values</h1>
+        <h1>24 Hour Table</h1>
         <p id="loading">Getting data...</p>
+      </div>
+      <div id="div2">
+        <h1>Useful Links</h1>
       </div>
     </div>
   </div>
@@ -45,6 +44,7 @@
       halfmoon.toggleDarkMode()
     }
   </script>
+  <script src="js/stations.js"></script>
   <script src="js/main.js"></script>
 </body>
 

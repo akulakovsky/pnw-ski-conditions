@@ -1,8 +1,8 @@
-addStation(24, "https://nwac.us/data-portal/csv/q/?datalogger_id=1&year=2021", "Alpental Base");
-addStation(24, "https://nwac.us/data-portal/csv/q/?datalogger_id=28&year=2021", "Crystal Base");
+addStation(24, "1");
+addStation(24, "28");
 
-function addStation(hours, url, stationName) {
-	Papa.parse(`https://rocky-taiga-02859.herokuapp.com/${url}`, {
+function addStation(hours, id) {
+	Papa.parse(`https://rocky-taiga-02859.herokuapp.com/https://nwac.us/data-portal/csv/q/?datalogger_id=${id}&year=2021`, {
 		download: true,
 		complete: function (results) {
 			var formatted = [];
@@ -23,6 +23,14 @@ function addStation(hours, url, stationName) {
 			var minTemp = getMinTemp(formatted);
 			var avgTemp = getAvgTemp(formatted);
 			var currentTemp = getCurrentTemp(formatted);
+
+			var stationName;
+			var stationsList = JSON.parse(stations);
+			stationsList.forEach((item, index) => {
+				if(item["id"] == id) {
+					stationName = item["name"];
+				}
+			});
 
 			if(document.getElementById("table") == null) {
 				makeInitialTable();
@@ -117,8 +125,6 @@ function makeInitialTable() {
 
 function addRow(data) {
 	var body = document.getElementById("table-body");
-	console.log(data)
-	console.log(body)
 	var values = body.insertRow(-1);
 	var units = ["", " in", "° F", "° F", "° F", "° F"]
 
