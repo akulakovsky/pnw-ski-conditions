@@ -1,9 +1,31 @@
-document.getElementById('submit').onclick = function() {
-	for (var option of document.getElementById('stations').options)
-	{
-			if (option.selected) {
-					addStation(24, option.value)
+init();
+
+function init() {
+	console.log('here')
+	var stationsString = window.localStorage.getItem('stations');
+	var stations = [];
+	if (stationsString != null) {
+		stations = JSON.parse(stationsString);
+	}
+	for (var station of stations) {
+		addStation(24, station);
+	}
+}
+
+document.getElementById('submit').onclick = function () {
+	for (var option of document.getElementById('stations').options) {
+		if (option.selected) {
+			var stationsString = window.localStorage.getItem('stations');
+			var stations = [];
+			if (stationsString != null) {
+				stations = JSON.parse(stationsString);
 			}
+			if (stations.length == 0 || stations.includes(option.value) == false) {
+				addStation(24, option.value);
+				stations.push(option.value);
+			}
+			window.localStorage.setItem('stations', JSON.stringify(stations));
+		}
 	}
 }
 
@@ -35,14 +57,14 @@ function addStation(hours, id) {
 			var noaaUrl;
 			var stationsList = JSON.parse(stations);
 			stationsList.forEach((item, index) => {
-				if(item["id"] == id) {
+				if (item["id"] == id) {
 					stationName = item["name"];
 					nwacUrl = item["nwac"];
 					noaaUrl = item["noaa"];
 				}
 			});
 
-			if(document.getElementById("table") == null) {
+			if (document.getElementById("table") == null) {
 				makeInitialTable();
 			}
 			addRow([stationName, precip, maxTemp, minTemp, avgTemp, currentTemp]);
@@ -54,7 +76,7 @@ function addStation(hours, id) {
 function addLink(stationName, nwacUrl, noaaUrl) {
 	var div2 = document.getElementById("div2");
 	var title = document.createElement("h5");
-	title.innerText= `${stationName}:`
+	title.innerText = `${stationName}:`
 	var noaa = document.createElement("p");
 	noaa.innerHTML = `<a href="${noaaUrl}">NOAA Forecast</a>`
 	var nwac = document.createElement("p");
@@ -84,7 +106,7 @@ function getMaxTemp(data) {
 	var max = -100;
 	data.forEach((item, index) => {
 		temp = parseFloat(item["Temperature"]);
-		if(temp > max) {
+		if (temp > max) {
 			max = temp;
 		}
 	})
@@ -95,7 +117,7 @@ function getMinTemp(data) {
 	var min = 200;
 	data.forEach((item, index) => {
 		temp = parseFloat(item["Temperature"]);
-		if(temp < min) {
+		if (temp < min) {
 			min = temp;
 		}
 	})
