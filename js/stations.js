@@ -29,7 +29,9 @@ let stations = `[
   },
   {
     "id": "17",
-    "name": "Stevens Pass - Skyline, 5250'"
+    "name": "Stevens Pass - Skyline, 5250'",
+    "nwac": "https://nwac.us/avalanche-forecast/#/west-slopes-central",
+    "noaa": "https://forecast.weather.gov/MapClick.php?lat=47.75&lon=-121.09"
   },
   {
     "id": "18",
@@ -37,7 +39,9 @@ let stations = `[
   },
   {
     "id": "1",
-    "name": "Alpental Base, 3100'"
+    "name": "Alpental Base, 3100'",
+    "nwac": "https://nwac.us/avalanche-forecast/#/snoqualmie-pass",
+    "noaa": "https://forecast.weather.gov/MapClick.php?lon=-121.44514560699466&lat=47.439350812150934"
   },
   {
     "id": "2",
@@ -73,7 +77,9 @@ let stations = `[
   },
   {
     "id": "28",
-    "name": "Crystal Base, 4540'"
+    "name": "Crystal Base, 4540'",
+    "nwac": "https://nwac.us/avalanche-forecast/#/west-slopes-south",
+    "noaa": "https://forecast.weather.gov/MapClick.php?lat=46.92912043955674&lon=-121.50098133017309&site=sew&unit=0&lg=en&FcstType=text#.VJybVAABo"
   },
   {
     "id": "29",

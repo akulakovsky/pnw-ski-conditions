@@ -1,5 +1,11 @@
-addStation(24, "1");
-addStation(24, "28");
+document.getElementById('submit').onclick = function() {
+	for (var option of document.getElementById('stations').options)
+	{
+			if (option.selected) {
+					addStation(24, option.value)
+			}
+	}
+}
 
 function addStation(hours, id) {
 	Papa.parse(`https://rocky-taiga-02859.herokuapp.com/https://nwac.us/data-portal/csv/q/?datalogger_id=${id}&year=2021`, {
@@ -25,10 +31,14 @@ function addStation(hours, id) {
 			var currentTemp = getCurrentTemp(formatted);
 
 			var stationName;
+			var nwacUrl;
+			var noaaUrl;
 			var stationsList = JSON.parse(stations);
 			stationsList.forEach((item, index) => {
 				if(item["id"] == id) {
 					stationName = item["name"];
+					nwacUrl = item["nwac"];
+					noaaUrl = item["noaa"];
 				}
 			});
 
@@ -36,8 +46,22 @@ function addStation(hours, id) {
 				makeInitialTable();
 			}
 			addRow([stationName, precip, maxTemp, minTemp, avgTemp, currentTemp]);
+			addLink(stationName, nwacUrl, noaaUrl);
 		}
 	});
+}
+
+function addLink(stationName, nwacUrl, noaaUrl) {
+	var div2 = document.getElementById("div2");
+	var title = document.createElement("h5");
+	title.innerText= `${stationName}:`
+	var noaa = document.createElement("p");
+	noaa.innerHTML = `<a href="${noaaUrl}">NOAA Forecast</a>`
+	var nwac = document.createElement("p");
+	nwac.innerHTML = `<a href="${nwacUrl}">NWAC Avy Forecast</a>`;
+	div2.appendChild(title);
+	div2.appendChild(noaa);
+	div2.appendChild(nwac);
 }
 
 function getSnow(data) {
