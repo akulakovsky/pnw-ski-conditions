@@ -1,7 +1,6 @@
 init();
 
 function init() {
-	console.log('here')
 	var stationsString = window.localStorage.getItem('stations');
 	var stations = [];
 	if (stationsString != null) {
@@ -67,23 +66,33 @@ function addStation(hours, id) {
 			if (document.getElementById("table") == null) {
 				makeInitialTable();
 			}
-			addRow([stationName, precip, maxTemp, minTemp, avgTemp, currentTemp]);
+			addRow([stationName, precip, 0, precip, maxTemp, minTemp, avgTemp, currentTemp]);
 			addLink(stationName, nwacUrl, noaaUrl);
 		}
 	});
 }
 
 function addLink(stationName, nwacUrl, noaaUrl) {
-	var div2 = document.getElementById("div2");
+	var divToAppend;
+	if (document.getElementById("col1").innerHTML == ""){
+		divToAppend = document.getElementById("col1");
+	}
+	else if (document.getElementById("col2").innerHTML == "") {
+		divToAppend = document.getElementById("col2");
+	}
+	else {
+		divToAppend = document.getElementById("col3");
+	}
+
 	var title = document.createElement("h5");
 	title.innerText = `${stationName}:`
 	var noaa = document.createElement("p");
 	noaa.innerHTML = `<a href="${noaaUrl}">NOAA Forecast</a>`
 	var nwac = document.createElement("p");
 	nwac.innerHTML = `<a href="${nwacUrl}">NWAC Avy Forecast</a>`;
-	div2.appendChild(title);
-	div2.appendChild(noaa);
-	div2.appendChild(nwac);
+	divToAppend.appendChild(title);
+	divToAppend.appendChild(noaa);
+	divToAppend.appendChild(nwac);
 }
 
 function getSnow(data) {
@@ -154,7 +163,7 @@ function makeInitialTable() {
 	var body = table.createTBody();
 	body.id = "table-body"
 	var valueNames = header.insertRow(0);
-	var arr = ["Station", "Precipitation", "Max Temperature", "Min Temperature", "Average Temperature", "Current Temperature"]
+	var arr = ["Station", "Precipitation", "Snow", "Non-Snow Precip", "Max Temperature", "Min Temperature", "Average Temperature", "Current Temperature"]
 
 	arr.forEach((item, index) => {
 		var th = document.createElement("th");
@@ -172,7 +181,7 @@ function makeInitialTable() {
 function addRow(data) {
 	var body = document.getElementById("table-body");
 	var values = body.insertRow(-1);
-	var units = ["", " in", "° F", "° F", "° F", "° F"]
+	var units = ["", " in", " in", " in", "° F", "° F", "° F", "° F"]
 
 	data.forEach((item, index) => {
 		values.insertCell(-1).innerHTML = item + units[index];
